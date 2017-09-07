@@ -1,13 +1,18 @@
+Vue.filter("money", (value, type) => {
+  return "￥" + value.toFixed(2) + type;
+});
+
 var vm = new Vue({
   el: "#app",
   data: {
     productList: [],
     totalMoney: 0,
     checkAllFlag: false,
-    delFlag: false
+    delFlag: false,
+    curProduct:'',
   },
   filters: {
-    formatMoney: value => {
+    formatMoney: (value) => {
       return "￥" + value.toFixed(2);
     }
   },
@@ -68,10 +73,16 @@ var vm = new Vue({
           this.totalMoney += item.productPrice * item.productQuantity;
         }
       });
+    },
+    delConfirm: function(item){
+      this.delFlag = true
+      this.curProduct = item
+    },
+    delProduct:function(){
+      let index = this.productList.indexOf(this.curProduct)
+      this.productList.splice(index,1)
+      this.delFlag = false
     }
   }
 });
 
-Vue.filter("money", (value, type) => {
-  return "￥" + value.toFixed(2) + type;
-});
