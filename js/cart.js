@@ -48,18 +48,15 @@ var vm = new Vue({
         item.checked = !item.checked;
       }
     },
-    checkAll: function() {
-      this.checkAllFlag = !this.checkAllFlag;
-      if (this.checkAllFlag) {
-        this.productList.forEach((item, index) => {
-          if (typeof item.checked === "undefined") {
-            this.$set(item, "checked", this.checkAllFlag);
-            item.checked = this.checkAllFlag;
-          } else {
-            item.checked = false;
-          }
-        });
-      }
+    checkAll: function(flag) {
+      this.checkAllFlag = flag;
+      this.productList.forEach((item, index) => {
+        if (typeof item.checked === "undefined") {
+          this.$set(item, "checked", this.checkAllFlag);
+        } else {
+          item.checked = this.checkAllFlag;
+        }
+      });
     }
   }
 });
