@@ -3,7 +3,8 @@ var vm = new Vue({
   data: {
     productList: [],
     totalMoney: 0,
-    checkAllFlag: false
+    checkAllFlag: false,
+    delFlag: false
   },
   filters: {
     formatMoney: value => {
@@ -22,7 +23,6 @@ var vm = new Vue({
         .get("data/cartData.json")
         .then(response => {
           this.productList = response.data.result.list;
-          this.totalMoney = response.data.result.list;
           console.log(response);
           console.log(this.productList);
         })
@@ -30,7 +30,7 @@ var vm = new Vue({
           console.log(error);
         });
     },
-    changeMoney: (product, change) => {
+    changeMoney: function(product, change) {
       if (change > 0) {
         product.productQuantity++;
       } else {
@@ -39,6 +39,7 @@ var vm = new Vue({
           product.productQuantity = 1;
         }
       }
+      this.caleTotalPrice();
     },
     selectedProduct: function(item) {
       if (typeof item.checked === "undefined") {
@@ -47,6 +48,7 @@ var vm = new Vue({
       } else {
         item.checked = !item.checked;
       }
+      this.caleTotalPrice();
     },
     checkAll: function(flag) {
       this.checkAllFlag = flag;
@@ -55,6 +57,15 @@ var vm = new Vue({
           this.$set(item, "checked", this.checkAllFlag);
         } else {
           item.checked = this.checkAllFlag;
+        }
+      });
+      this.caleTotalPrice();
+    },
+    caleTotalPrice: function() {
+      this.totalMoney = 0;
+      this.productList.forEach((item, index) => {
+        if (item.checked) {
+          this.totalMoney += item.productPrice * item.productQuantity;
         }
       });
     }
